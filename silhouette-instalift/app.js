@@ -1,0 +1,7 @@
+const menu=document.querySelector('.menu'),nav=document.querySelector('header nav');
+menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation':'Open navigation');});
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open navigation');}));
+const links=[...document.querySelectorAll('aside nav a')];
+function updateReading(){const range=document.documentElement.scrollHeight-innerHeight;document.querySelector('.progress i').style.width=(range>0?scrollY/range*100:0)+'%';let active=links[0];links.forEach(a=>{if(document.querySelector(a.hash).getBoundingClientRect().top<200)active=a;});links.forEach(a=>{a.classList.toggle('active',a===active);if(a===active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});}
+addEventListener('scroll',updateReading,{passive:true});addEventListener('resize',updateReading);updateReading();
+document.querySelector('#share').addEventListener('click',async()=>{const toast=document.querySelector('#toast');try{await navigator.clipboard.writeText(location.href.split('#')[0]);toast.textContent='Article link copied';}catch{toast.textContent='Copy the address from your browser to share this article.';}toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),3000);});
